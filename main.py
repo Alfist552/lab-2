@@ -96,9 +96,6 @@ def main():
     except Exception as e:
         print(f"Произошла ошибка: {e}")
 
-if __name__ == "__main__":
-    main()
-
 class TestMacAddress(unittest.TestCase):
     """Класс для Unit-тестов"""
 
@@ -143,3 +140,32 @@ class TestMacAddress(unittest.TestCase):
         self.assertEqual(len(all_found), 2)
         self.assertEqual(len(valid_macs),1)
         self.assertIn("12:24:24:D9:A5:07", valid_macs)
+
+    def test_extract_mac_from_file(self):
+        """Извлечение MAC-адреса из файла"""
+        test_content = "12:24:24:D9:A5:07\n12-24-24-D9-A5-07\nInvalid: 00:1B:44:11:3A"
+
+        with tempfile.NamedTemporaryFile(mode = 'w', delete = False, encoding = 'utf-8') as f:
+            f.write(test_content)
+            temp_file = f.name
+
+        try:
+            valid_macs, all_found = self.validator.extract_mac_from_file(temp_file)
+
+            self.assertEqual(len(all_found), 3)
+            self.assertEqual(len(valid_macs), 2)
+
+            self.assertIn("12:24:24:D9:A5:07", valid_macs)
+            self.assertIn("12-24-24-D9-A5-07", valid_macs)
+
+        finally:
+            os.unlink(temp_file)
+
+if __name__ == "__main__":
+    import sys
+
+    if len(sys.argv) > 1 and sys.argv[1] == 'test':
+        print("Unit tests")
+        unittest.main(argv = [''], verbosity = 2, exit = False)
+    else:
+        main()
