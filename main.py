@@ -10,7 +10,7 @@ class MacAddress:
     MAC_Pattern = re.compile( #Поиск Потенциальныъх MAC-адресов
         r'(?:[0-9A-Za-z]{2}[:-]){5}[0-9A-Za-z]{2}|' #Формат ХХ:ХХ:ХХ:ХХ:ХХ и ХХ-ХХ-ХХ-ХХ-ХХ
         r'(?:[0-9A-Za-z]{4}\.){2}[0-9A-Za-z]{4}|' #XXXX.XXXX.XXXX
-        r'[0-9A-Za-z]{12}' #XXXXXXXXXXXX #XXXXXXXXXXXXX
+        r'[0-9A-Za-z]{12}' #XXXXXXXXXXXX
     )
 
     Strict_MAC_Pattern = re.compile( #Валидация MAC-адресов
@@ -56,16 +56,16 @@ def main():
     print("3. Поиск MAC-адреса в файле")
 
     try:
-        choise = input("Выберите вариант:(1-3): ").strip()
+        choice = input("Выберите вариант:(1-3): ").strip()
 
-        if choise == "1":
+        if choice == "1":
             mac = input("Введите MAC-адреса для проверки: ").strip()
             if validator.is_valid_mac(mac):
                 print(f"Правильный mac-адрес: {mac}")
             else:
                 print("Неправильный MAC-адрес")
 
-        elif choise == "2":
+        elif choice == "2":
             text = input("Введите текст для поиска MAC-адресов ").strip()
             valid_macs, all_found = validator.extract_mac_from_text(text)
 
@@ -77,7 +77,7 @@ def main():
                 for i, mac in enumerate(valid_macs, 1):
                     print(f"{i}. {mac}")
 
-        elif choise == "3":
+        elif choice == "3":
             file_path = input("Укажите путь файла: ").strip()
             valid_macs, all_found = validator.extract_mac_from_file(file_path)
 
@@ -135,7 +135,7 @@ class TestMacAddress(unittest.TestCase):
 
     def test_extract_mac_from_text(self):
         """Извлечение MAC-адресов из текста"""
-        text = "Valid: 12:24:24:D9:A5:07, Invalid: 12:24:24:D9:A5:GG"
+        text = "Valid: 12:24:24:D9:A5:07, Invalid: 122424D9A5GG"
         valid_macs, all_found = self.validator.extract_mac_from_text(text)
         self.assertEqual(len(all_found), 2)
         self.assertEqual(len(valid_macs),1)
@@ -143,7 +143,7 @@ class TestMacAddress(unittest.TestCase):
 
     def test_extract_mac_from_file(self):
         """Извлечение MAC-адреса из файла"""
-        test_content = "12:24:24:D9:A5:07\n12-24-24-D9-A5-07\nInvalid: 00:1B:55:11:3A:GG"
+        test_content = "12:24:24:D9:A5:07\n12-24-24-D9-A5-07\nInvalid: 001B.5511.3AGG"
 
         with tempfile.NamedTemporaryFile(mode = 'w', delete = False, encoding = 'utf-8') as f:
             f.write(test_content)
@@ -166,6 +166,6 @@ if __name__ == "__main__":
 
     if len(sys.argv) > 1 and sys.argv[1] == 'test':
         print("Unit tests")
-        unittest.main(argv = [''], verbosity = 2, exit = False)
+        unittest.main(verbosity = 2, exit = False)
     else:
         main()
