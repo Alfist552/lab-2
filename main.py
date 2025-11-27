@@ -39,3 +39,53 @@ class MacAddress:
             raise IOError(f"Ошибка чтения файла {e}")
 
         return self.extract_mac_from_text(content)
+
+def main():
+    "Функция - меню"
+    validator = MacAddress()
+
+    print("Меню")
+    print("1. Проверка MAC-адреса")
+    print("2. Поиск MAC-адреса в тексте")
+    print("3. Поиск MAC-адреса в файле")
+
+    try:
+        choise = input("Выберите вариант:(1-3): ").strip()
+
+        if choise == "1":
+            mac = input("Введите MAC-адреса для проверки: ").strip()
+            if validator.is_valid_mac(mac):
+                print(f"Правильный mac-адрес: {mac}")
+            else:
+                print("Неправильный MAC-адрес")
+
+        elif choise == "2":
+            text = input("Введите текст для поиска MAC-адресов ").strip()
+            valid_macs, all_found = validator.extract_mac_from_text(text)
+
+            print(f"Найдено адресов: {len(all_found)}")
+            print(f"Правильных адресов: {len(valid_macs)}")
+
+            if valid_macs:
+                print("Правильные MAC-адреса: ")
+                for i, mac in enumerate(valid_macs, 1):
+                    print(f"{i}. {mac}")
+
+        elif choise == "3":
+            file_path = input("Укажите путь файла: ").strip()
+            valid_macs, all_found = validator.extract_mac_from_file(file_path)
+
+            print(f"Найдено адресов: {len(all_found)}")
+            print(f"Правильных адресов: {len(valid_macs)}")
+
+            if valid_macs:
+                print("Правильные MAC-адреса: ")
+                for i, mac in enumerate(valid_macs, 1):
+                    print(f"{i}. {mac}")
+        else:
+            print("Неверный выбор.")
+
+    except KeyboardInterrupt:
+        print("\n Disconnect by user.")
+    except Exception as e:
+        print(f"Произошла ошибка: {e}")
