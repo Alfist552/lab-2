@@ -105,6 +105,7 @@ class TestMacAddress(unittest.TestCase):
     def setup(self):
         """Запуск перед каждой функцией для тестирования"""
         self.validator = MacAddress()
+
     def test_valid_mac_address(self):
         """Тест правильных MAC-адресов"""
         valid_macs = [
@@ -112,6 +113,33 @@ class TestMacAddress(unittest.TestCase):
           "00:3E:D7:41:65:45"
           "BC4F.19C1.7A6E"
         ]
+
         for mac in valid_macs:
             with self.subTest(mac=mac):
                 self.assertTrue(self.validator.is_valid_mac(mac))
+
+    def test_invalid_mac_address(self):
+        """Тест неправильных MAC-адресов"""
+        invalid_macs = [
+            "11:22:33:44:55"
+            "YY-XX-BB-CC-DD"
+            "ABCDEFGHIJKLM"
+            "BC4F.19C1.7A6M"
+        ]
+        for mac in invalid_macs:
+            with self.subTest(mac=mac):
+                self.assertFalse(self.validator.is_valid_mac(mac))
+
+    def test_find_mac_addresses_in_text(self):
+        """Поиск MAC-адресов в тексте"""
+        text = "MAC1: 12:24:24:D9:A5:07, MAC2: 00-1B-44-11-3A-B8"
+        found = self.validator.find_mac_address(text)
+        self.assertEqual(found,["12:24:24:D9:A5:07","00-1B-44-11-3A-B8"])
+
+    def test_extract_mac_from_text(self):
+        """Извлечение MAC-адресов из текста"""
+        text =  "Valid: 12:24:24:D9:A5:07, Invalid: XX:YY:BB:AA"
+        valid_macs, all_found = self.validator.extract_mac_from_text(text)
+        self.assertEqual(len(all_found), 2)
+        self.assertEqual(len(valid_macs),1)
+        self.assertIn("12:24:24:D9:A5:07", valid_macs)
