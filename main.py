@@ -6,11 +6,11 @@ class MacAddress:
     """Классы для работы с Mac-адресами"""
 
     MAC_Pattern = re.compile( #Поиск MAC-адресов
-        r'(?:[0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})]' #Формат ХХ:ХХ:ХХ:ХХ:ХХ и ХХ-ХХ-ХХ-ХХ-ХХ
+        r'(?:[0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})' #Формат ХХ:ХХ:ХХ:ХХ:ХХ и ХХ-ХХ-ХХ-ХХ-ХХ
     )
 
     Strict_MAC_Pattern = re.compile( #Валидация MAC-адресов
-        r'^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$|'
+        r'^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$'
     )
 
     def find_mac_address(self, text: str) -> List[str]:
@@ -89,3 +89,6 @@ def main():
         print("\n Disconnect by user.")
     except Exception as e:
         print(f"Произошла ошибка: {e}")
+
+if __name__ == "__main__":
+    main()
