@@ -16,7 +16,7 @@ class MacAddress:
     Strict_MAC_Pattern = re.compile( #Валидация MAC-адресов
         r'^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$|'
         r'^([0-9A-Fa-f]{4}\.){2}[0-9A-Fa-f]{4}$|'
-        r'^3[0-9A-Fa-f]{12}$'
+        r'^[0-9A-Fa-f]{12}$'
     )
 
     def find_mac_address(self, text: str) -> List[str]:
@@ -99,15 +99,15 @@ def main():
 class TestMacAddress(unittest.TestCase):
     """Класс для Unit-тестов"""
 
-    def setup(self):
+    def setUp(self):
         """Запуск перед каждой функцией для тестирования"""
         self.validator = MacAddress()
 
     def test_valid_mac_address(self):
         """Тест правильных MAC-адресов"""
         valid_macs = [
-          "00:0B:56:62:BD:70"
-          "00:3E:D7:41:65:45"
+          "00:0B:56:62:BD:70",
+          "00:3E:D7:41:65:45",
           "BC4F.19C1.7A6E"
         ]
 
@@ -118,9 +118,9 @@ class TestMacAddress(unittest.TestCase):
     def test_invalid_mac_address(self):
         """Тест неправильных MAC-адресов"""
         invalid_macs = [
-            "11:22:33:44:55"
-            "YY-XX-BB-CC-DD"
-            "ABCDEFGHIJKLM"
+            "11:22:33:44:55",
+            "YY-XX-BB-CC-DD",
+            "ABCDEFGHIJKLM",
             "BC4F.19C1.7A6M"
         ]
         for mac in invalid_macs:
