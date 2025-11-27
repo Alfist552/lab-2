@@ -1,6 +1,8 @@
 import re
 import os
 from typing import List, Tuple
+import unittest
+import tempfile
 
 class MacAddress:
     """Классы для работы с Mac-адресами"""
@@ -14,7 +16,7 @@ class MacAddress:
     Strict_MAC_Pattern = re.compile( #Валидация MAC-адресов
         r'^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$|'
         r'^([0-9A-Fa-f]{4}\.){2}[0-9A-Fa-f]{4}$|'
-        r'^[0-9A-Fa-f]{12}$'
+        r'^3[0-9A-Fa-f]{12}$'
     )
 
     def find_mac_address(self, text: str) -> List[str]:
@@ -96,3 +98,20 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+class TestMacAddress(unittest.TestCase):
+    """Класс для Unit-тестов"""
+
+    def setup(self):
+        """Запуск перед каждой функцией для тестирования"""
+        self.validator = MacAddress()
+    def test_valid_mac_address(self):
+        """Тест правильных MAC-адресов"""
+        valid_macs = [
+          "00:0B:56:62:BD:70"
+          "00:3E:D7:41:65:45"
+          "BC4F.19C1.7A6E"
+        ]
+        for mac in valid_macs:
+            with self.subTest(mac=mac):
+                self.assertTrue(self.validator.is_valid_mac(mac))
