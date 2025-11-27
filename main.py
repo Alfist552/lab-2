@@ -7,10 +7,10 @@ import tempfile
 class MacAddress:
     """Классы для работы с Mac-адресами"""
 
-    MAC_Pattern = re.compile( #Поиск MAC-адресов
-        r'(?:[0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}|' #Формат ХХ:ХХ:ХХ:ХХ:ХХ и ХХ-ХХ-ХХ-ХХ-ХХ
-        r'(?:[0-9A-Fa-f]{4}\.){2}[0-9A-Fa-f]{4}|' #XXXX.XXXX.XXXX
-        r'[0-9A-Fa-f]{12}' #XXXXXXXXXXXX #XXXXXXXXXXXXX
+    MAC_Pattern = re.compile( #Поиск Потенциальныъх MAC-адресов
+        r'(?:[0-9A-Za-z]{2}[:-]){5}[0-9A-Za-z]{2}|' #Формат ХХ:ХХ:ХХ:ХХ:ХХ и ХХ-ХХ-ХХ-ХХ-ХХ
+        r'(?:[0-9A-Za-z]{4}\.){2}[0-9A-Za-z]{4}|' #XXXX.XXXX.XXXX
+        r'[0-9A-Za-z]{12}' #XXXXXXXXXXXX #XXXXXXXXXXXXX
     )
 
     Strict_MAC_Pattern = re.compile( #Валидация MAC-адресов
@@ -135,7 +135,7 @@ class TestMacAddress(unittest.TestCase):
 
     def test_extract_mac_from_text(self):
         """Извлечение MAC-адресов из текста"""
-        text =  "Valid: 12:24:24:D9:A5:07, Invalid: XX:YY:BB:AA"
+        text = "Valid: 12:24:24:D9:A5:07, Invalid: 12:24:24:D9:A5:GG"
         valid_macs, all_found = self.validator.extract_mac_from_text(text)
         self.assertEqual(len(all_found), 2)
         self.assertEqual(len(valid_macs),1)
@@ -143,7 +143,7 @@ class TestMacAddress(unittest.TestCase):
 
     def test_extract_mac_from_file(self):
         """Извлечение MAC-адреса из файла"""
-        test_content = "12:24:24:D9:A5:07\n12-24-24-D9-A5-07\nInvalid: 00:1B:44:11:3A"
+        test_content = "12:24:24:D9:A5:07\n12-24-24-D9-A5-07\nInvalid: 00:1B:55:11:3A:GG"
 
         with tempfile.NamedTemporaryFile(mode = 'w', delete = False, encoding = 'utf-8') as f:
             f.write(test_content)
