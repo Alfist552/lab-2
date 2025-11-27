@@ -24,3 +24,4 @@ class MacAddress:
         all_found = self.find_mac_address(text)
         valid_macs = [mac for mac in all_found if self.is_valid_mac(mac)]
         return valid_macs, all_found
+
